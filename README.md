@@ -18,3 +18,9 @@ python3 inject_schema.py ./statements/surreal-deal-store-min.surql ./statements/
 - **Second Argument:** Path to the base JSONL dataset containing a "system_message" placeholder (`./statements/select/01-base.jsonl`)
 
 This setup guarantees that each generated query aligns perfectly with the defined schema, enhancing the model's reliability and performance.
+
+## Extract Queries
+
+```
+python3 extract_queries.py ./statements/select/01-base.jsonl
+```
