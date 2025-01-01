@@ -1,60 +1,120 @@
+// Query 90
+SELECT * FROM person WHERE count(->order->product) > 3;
+
+// Query 91
+SELECT * FROM product WHERE <-cart<-person WHERE address.country = 'Canada';
+
+// Query 92
+SELECT name FROM person WHERE ->order->(product WHERE name = 'Smartphone') AND ->review->(product WHERE name = 'Smartphone');
+
+// Query 93
+SELECT math::sum(price * quantity) AS total_revenue FROM order WHERE out IN (SELECT id FROM product WHERE category = 'Books');
+
+// Query 94
+SELECT * FROM product WHERE <-wishlist<-(person WHERE age >= 20 AND age <= 30);
+
+// Query 95
+SELECT * FROM person WHERE ->order->(product WHERE price > 500);
+
+// Query 96
+SELECT * FROM product WHERE <-review WHERE rating < 2;
+
+// Query 97
+SELECT * FROM person WHERE !->cart;
+
+// Query 98
+SELECT * FROM product WHERE <-order<-person->review->product WHERE id = product.id;
+
+// Query 99
+SELECT * FROM person WHERE ->wishlist->(product WHERE name = 'Laptop') AND !->order->(product WHERE name = 'Laptop');
+
+// Query 100
+SELECT * FROM product WHERE <-order<-(person WHERE address.country = 'USA') AND <-order<-(person WHERE address.country = 'Canada');
+
+// Query 101
+SELECT math::mean(rating) AS avg_rating FROM review WHERE ->product->(product WHERE category = 'Electronics');
+
+// Query 102
+SELECT * FROM person WHERE ->(order WHERE time::now() - time.created_at <= 7d);
+
+// Query 103
+SELECT *, count(<-cart<-) AS cart_count FROM product GROUP BY id HAVING cart_count > 50;
+
+// Query 104
+SELECT * FROM person WHERE ->cart->product->(product_sku WHERE quantity < 5);
+
+// Query 105
+SELECT * FROM product WHERE !<-order;
+
+// Query 106
+SELECT * FROM person WHERE ->order AND address.shipping IS NONE;
+
+// Query 107
+SELECT * FROM product WHERE <-review<-(person WHERE age > 50);
+
 // Query 108
-SELECT * FROM product WHERE id IN (SELECT VALUE out FROM review WHERE rating = 5);
+SELECT id, math::sum(<-order.quantity) AS total_quantity FROM product GROUP BY id;
 
 // Query 109
-SELECT name, email FROM seller WHERE id IN (SELECT VALUE seller FROM product WHERE category = 'Electronics');
+SELECT * FROM product WHERE <-order<-(person WHERE count(->wishlist) > 5);
 
 // Query 110
-SELECT * FROM order WHERE quantity < 5;
+SELECT id, count(->cart) AS cart_items FROM person;
 
 // Query 111
-SELECT * FROM product WHERE 'M' IN sizes OR 'L' IN sizes;
+SELECT *, count(<-order<-) AS user_count FROM product GROUP BY id HAVING user_count >= 3;
 
 // Query 112
-SELECT out.seller AS seller_id, math::sum(price * quantity) AS total_revenue FROM order GROUP BY seller_id;
+SELECT * FROM person WHERE ->wishlist->(product WHERE name = 'Tablet') AND ->cart->(product WHERE name = 'Laptop');
 
 // Query 113
-SELECT array::distinct(in) AS person_ids FROM review WHERE time.created_at >= time::now() - 30d GROUP ALL;
+SELECT * FROM product WHERE <-order WHERE time::now() - time.created_at <= 30d;
 
 // Query 114
-SELECT * FROM seller WHERE website.store CONTAINS 'store';
+SELECT * FROM person WHERE ->review->product.id NOT IN (SELECT VALUE out FROM order WHERE in = person.id);
 
 // Query 115
-SELECT * FROM product WHERE array::len(images) > 0;
+SELECT id, math::mean(<-review.rating) AS avg_rating FROM product GROUP BY id HAVING avg_rating < 3;
 
 // Query 116
-SELECT * FROM product WHERE name CONTAINS 'Smartphone';
+SELECT * FROM person WHERE count(->order) > 10;
 
 // Query 117
-SELECT out AS product_id, count() AS order_count FROM order GROUP BY product_id;
+SELECT * FROM product WHERE <-order WHERE order_status = 'returned';
 
 // Query 118
-SELECT array::distinct(in) AS person_ids FROM cart GROUP ALL;
+SELECT * FROM person WHERE ->order->(product WHERE category = 'Furniture');
 
 // Query 119
-SELECT * FROM product WHERE id IN array::distinct(SELECT VALUE in FROM product_sku);
+SELECT id, count(->review) AS review_count FROM person;
 
 // Query 120
-SELECT * FROM seller WHERE time.updated_at >= time::now() - 7d;
+SELECT * FROM product WHERE count(<-cart<-person GROUP BY address.city) > 1;
 
 // Query 121
-SELECT * FROM product WITH INDEX idx_product_details_embedding;
+SELECT * FROM person WHERE ->(order WHERE quantity < 0);
 
 // Query 122
-SELECT * FROM order WHERE order_status NOTINSIDE ['processed', 'shipped'];
+SELECT * FROM product WHERE <-order WHERE order_status != 'shipped';
 
 // Query 123
-SELECT * FROM review WHERE string::len(review_text) > 0;
+SELECT * FROM person WHERE address.shipping = address.billing;
 
 // Query 124
-SELECT * FROM order WHERE order_status = 'processed' AND time.shipped_at IS NONE;
+SELECT math::mean(age) AS avg_age FROM person WHERE ->order->(product WHERE name = 'Smartwatch');
 
 // Query 125
-SELECT *, fn::pound_to_usd(price) AS price_usd FROM product WHERE currency = 'GBP';
+SELECT * FROM product WHERE EXISTS(<-review WHERE string::contains(string::lowercase(review_text), 'excellent'));
 
 // Query 126
-SELECT * FROM product WHERE id IN (SELECT VALUE in FROM product_sku WHERE quantity = 0);
+SELECT * FROM person WHERE ->order->(product WHERE price > 1000);
 
 // Query 127
-SELECT out AS product_id, math::mean(quantity) AS avg_quantity FROM order GROUP BY product_id;
+SELECT * FROM product WHERE <-order<-(person WHERE email IS NONE);
+
+// Query 128
+SELECT * FROM person WHERE count(->order GROUP BY out) > 1;
+
+// Query 129
+SELECT *, math::sum(<-order.quantity * price) AS total_sales FROM product GROUP BY id ORDER BY total_sales DESC LIMIT 10;
 

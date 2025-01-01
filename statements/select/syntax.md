@@ -30,3 +30,5 @@ SELECT [ VALUE ] @fields [ AS @alias ]
 For example usage use this Documentation:
 
 [SELECT Statement Usage](https://surrealdb.com/docs/surrealql/statements/select)
+[RELATE Statement Usage](https://surrealdb.com/docs/surrealql/statements/relate)
+

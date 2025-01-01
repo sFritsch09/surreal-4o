@@ -26,7 +26,7 @@ for entry in jsonl_entries:
             message['content'] = system_message
 
 # Write the updated JSONL entries to a new file
-output_file_path = '00-patch.jsonl'
+output_file_path = '02-patch.jsonl'
 with open(output_file_path, 'w') as output_file:
     for entry in jsonl_entries:
         json.dump(entry, output_file)
